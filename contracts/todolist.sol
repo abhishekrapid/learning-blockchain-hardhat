@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;  // Specifies the version of solidity that our code is written with
+pragma solidity ^0.8.4;  // Specifies the version of solidity that our code is written with
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+
+error InvalidTaskId (string error_message_);
 
 contract TodoList is ReentrancyGuard, Ownable{
 
@@ -46,11 +48,17 @@ contract TodoList is ReentrancyGuard, Ownable{
 
     // Get a task from the list.
     function getTask(uint256 taskId_) public view returns (Todo memory){
+        if (taskId_ >= _listOfTodos.length){
+            revert("tdl:gt");
+        }
         return _listOfTodos[taskId_];
     }
 
     function markComplete(uint taskId_) external onlyOwner nonReentrant{
         // Mark a task as complete
+        if (taskId_ >= _listOfTodos.length){
+            revert("tdl:mc");
+        }
         _listOfTodos[taskId_].status = TodoStatuses.COMPLETE;
     }
 
@@ -60,6 +68,9 @@ contract TodoList is ReentrancyGuard, Ownable{
         onlyOwner
         returns (TodoStatuses)
     {
+        if (taskId_ >= _listOfTodos.length){
+            revert("tdl:gtsai");
+        }
         return _listOfTodos[taskId_].status;
     }
 
@@ -69,18 +80,26 @@ contract TodoList is ReentrancyGuard, Ownable{
         onlyOwner
         returns (string memory)
     {
+        if (taskId_ >= _listOfTodos.length){
+            revert("tdl:gttai");
+        }
         return _listOfTodos[taskId_].title;
     }
 
     // Removes a task from the list
     function removeTask(uint256 taskId_) external onlyOwner nonReentrant{
-        require(taskId_ <= _listOfTodos.length, "Tasks are less");
+        if (taskId_ >= _listOfTodos.length){
+            revert("tdl:rt");
+        }
         _listOfTodos[taskId_] = _listOfTodos[_listOfTodos.length - 1];
         _listOfTodos.pop();
     }
 
     // Update a task from the list.
     function updateTask(uint256 taskId_, string memory text_) external onlyOwner nonReentrant{
+        if (taskId_ >= _listOfTodos.length){
+            revert("tdl:ut");
+        }
         _listOfTodos[taskId_].title = text_;
     }
 
