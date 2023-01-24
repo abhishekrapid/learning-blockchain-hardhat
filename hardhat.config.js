@@ -14,7 +14,7 @@ const ALCHEMY_API_KEY = secrets.ALCHEMY_API_KEY;
 const GOERLI_PRIVATE_KEY = secrets.GOERLI_PRIVATE_KEY;
 
 module.exports = {
-    solidity: "0.8.17",
+    solidity: "0.8.4",
     networks: {
         goerli: {
             url: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
